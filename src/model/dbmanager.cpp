@@ -23,7 +23,7 @@ void DbManager::insert(Call *call)
 
 }
 
-void DbManager::remove(int, int, int)
+void DbManager::remove(int id)
 {
     QSqlQuery query(m_db);
     QString str = QString("DELETE FROM Calls "
