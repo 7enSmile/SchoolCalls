@@ -10,10 +10,11 @@ class Call
 public:
     int id;
     int hours;
-    int minuts;
+    int minutes;
     int type;
     QString soundPatch;
-    Call(int, int, int, QString);
+    int saturday;
+    Call(int,int, int, int, QString, int);
     Call();
 };
 

@@ -1,11 +1,16 @@
 #include "../../include/viewmodel/call.h"
 
-Call::Call(int h, int m, int t, QString p)
+
+
+Call::Call(int i, int h, int m, int t, QString p, int s)
 {
+    id = i;
     hours = h;
-    minuts = m;
+    minutes = m;
     type = t;
     soundPatch = p;
+    saturday = s;
+
 }
 
 Call::Call()

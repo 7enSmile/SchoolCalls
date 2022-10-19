@@ -11,13 +11,14 @@ void DbManager::insert(Call *call)
 {
     QSqlQuery query(m_db);
     query.prepare(
-        "INSERT INTO Calls(hours, minutes,type,soundpatch)"
-        "VALUES(:hours, :minutes, :type, :soundpatch)"
+        "INSERT INTO Calls(hours, minutes, type, soundpatch, saturday)"
+        "VALUES(:hours, :minutes, :type, :soundpatch, :saturday)"
     );
     query.bindValue(":hours", call->hours);
-    query.bindValue(":minutes", call->minuts);
+    query.bindValue(":minutes", call->minutes);
     query.bindValue(":type", call->type);
     query.bindValue(":soundpatch", call->soundPatch);
+    query.bindValue(":saturday", call->saturday);
     query.exec();
 
 }
@@ -35,9 +36,9 @@ void DbManager::update(Call *call)
     QSqlQuery query(m_db);
     QString str = QString(
         "UPDATE Calls "
-        "SET hours=%1, minutes=%2, type=%3, soundpatch='%4' "
-        "WHERE id=%5"
-    ).arg(call->hours).arg(call->minuts).arg(call->type).arg(call->soundPatch).arg(call->id);
+        "SET hours=%1, minutes=%2, type=%3, soundpatch='%4', saturday =%5 "
+        "WHERE id=%6"
+    ).arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch).arg(call->saturday).arg(call->id);
     qDebug()<<query.lastError();
 }
 
@@ -54,8 +55,8 @@ QList<Call *>* DbManager::getListCall(int type)
         int minutes = query.value(2).toInt();
         int type = query.value(3).toInt();
         QString soundPatch = query.value(4).toString();
-        Call *call = new Call(hours,minutes,type,soundPatch);
-        call->id= id;
+        int saturday = query.value(5).toInt();
+        Call *call = new Call(id,hours,minutes,type,soundPatch,saturday);
         listOfCalls->append(call);
     }
     return listOfCalls;
@@ -75,9 +76,10 @@ void DbManager::Find(int h, int m, bool &flag, Call& call)
             flag = true;
             call.id = query.value(0).toInt();
             call.hours = query.value(1).toInt();
-            call.minuts = query.value(2).toInt();
+            call.minutes = query.value(2).toInt();
             call.type = query.value(3).toInt();
             call.soundPatch = query.value(4).toString();
+            call.saturday = query.value(5).toInt();
         }
     }
 }
