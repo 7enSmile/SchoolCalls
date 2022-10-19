@@ -2,7 +2,7 @@
 
 
 
-Call::Call(int i, int h, int m, int t, QString p, int s)
+Call::Call(int i, int h, int m, int t, QString p, int s, int sp)
 {
     id = i;
     hours = h;
@@ -10,6 +10,7 @@ Call::Call(int i, int h, int m, int t, QString p, int s)
     type = t;
     soundPatch = p;
     saturday = s;
+    special = sp;
 
 }
 

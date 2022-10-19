@@ -17,6 +17,7 @@ public:
     void update(Call *call);
     QList<Call*>* getListCall(int type);
     static void Find(int, int ,bool&, Call&);
+    int getId(Call* call);
 
 };
 

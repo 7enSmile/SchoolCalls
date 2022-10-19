@@ -11,14 +11,15 @@ void DbManager::insert(Call *call)
 {
     QSqlQuery query(m_db);
     query.prepare(
-        "INSERT INTO Calls(hours, minutes, type, soundpatch, saturday)"
-        "VALUES(:hours, :minutes, :type, :soundpatch, :saturday)"
+        "INSERT INTO Calls(hours, minutes, type, soundpatch, saturday, special)"
+        "VALUES(:hours, :minutes, :type, :soundpatch, :saturday, :special)"
     );
     query.bindValue(":hours", call->hours);
     query.bindValue(":minutes", call->minutes);
     query.bindValue(":type", call->type);
     query.bindValue(":soundpatch", call->soundPatch);
     query.bindValue(":saturday", call->saturday);
+    query.bindValue("::special", call->special);
     query.exec();
 
 }
@@ -36,10 +37,10 @@ void DbManager::update(Call *call)
     QSqlQuery query(m_db);
     QString str = QString(
         "UPDATE Calls "
-        "SET hours=%1, minutes=%2, type=%3, soundpatch='%4', saturday =%5 "
-        "WHERE id=%6"
-    ).arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch).arg(call->saturday).arg(call->id);
-    qDebug()<<query.lastError();
+        "SET hours=%1, minutes=%2, type=%3, soundpatch='%4', saturday=%5, special=%6 "
+        "WHERE id=%7"
+    ).arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch)
+            .arg(call->saturday).arg(call->special).arg(call->id);
 }
 
 QList<Call *>* DbManager::getListCall(int type)
@@ -56,7 +57,8 @@ QList<Call *>* DbManager::getListCall(int type)
         int type = query.value(3).toInt();
         QString soundPatch = query.value(4).toString();
         int saturday = query.value(5).toInt();
-        Call *call = new Call(id,hours,minutes,type,soundPatch,saturday);
+        int special = query.value(6).toInt();
+        Call *call = new Call(id,hours,minutes,type,soundPatch,saturday,special);
         listOfCalls->append(call);
     }
     return listOfCalls;
@@ -80,6 +82,19 @@ void DbManager::Find(int h, int m, bool &flag, Call& call)
             call.type = query.value(3).toInt();
             call.soundPatch = query.value(4).toString();
             call.saturday = query.value(5).toInt();
+            call.special = query.value(6).toInt();
         }
     }
+    db.close();
+}
+
+int DbManager::getId(Call *call)
+{
+    QString str = QString("SELECT id FROM Calls "
+                    "WHERE hours=%1 and minutes=%2 and type=%3 and soundpatch='%4'and saturday=%5 and special =%6").
+            arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch).arg(call->saturday).arg(call->special);
+    QSqlQuery query(m_db);
+    query.exec(str);
+    query.next();
+    return query.value(0).toInt();
 }

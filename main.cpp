@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     //w.show();
     //return a.exec();
     //Call *call = new Call(10,15,0,"1.mp3");
-    DbManager *dbmanager = new DbManager();
+    //DbManager *dbmanager = new DbManager();
     //dbmanager->insert(call);
     //dbmanager->remove(2);
     //call->id = 3;
@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
     bool flag;
     DbManager::Find(10,15, flag,call);
     if (flag){
-
-        qDebug()<< call.saturday;
+        DbManager *dbmanager = new DbManager();
+        qDebug()<< dbmanager->getId(&call);
     }
 
 

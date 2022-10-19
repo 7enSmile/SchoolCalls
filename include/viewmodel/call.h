@@ -14,7 +14,8 @@ public:
     int type;
     QString soundPatch;
     int saturday;
-    Call(int,int, int, int, QString, int);
+    int special;
+    Call(int,int, int, int, QString, int, int);
     Call();
 };
 
