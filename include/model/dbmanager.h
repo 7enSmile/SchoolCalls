@@ -13,7 +13,7 @@ private:
 public:
     DbManager();
     void insert(Call* call);
-    void remove(int id);
+    void remove(int);
     void update(Call *call);
     QList<Call*>* getListCall(int type);
     static void Find(int, int ,bool&, Call&);
