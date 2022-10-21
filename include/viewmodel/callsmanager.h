@@ -28,7 +28,7 @@ public:
 
     static void Find(int h, int m, int s, bool& flag, QString&p);
 
-    void get(int index, int&h, int&m, int& s);
+    void get(int index, int&h, int&m, QString&p, int& s);
 
 };
 

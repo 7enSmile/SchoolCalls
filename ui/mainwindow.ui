@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>526</width>
+    <width>654</width>
     <height>693</height>
    </rect>
   </property>
@@ -99,7 +99,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="toLesson">
           <attribute name="title">
@@ -118,7 +118,7 @@
                  <number>0</number>
                 </property>
                 <property name="columnCount">
-                 <number>3</number>
+                 <number>5</number>
                 </property>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
@@ -136,6 +136,16 @@
                 <column>
                  <property name="text">
                   <string>Суббота</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Путь к файлу</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string> </string>
                  </property>
                 </column>
                </widget>
@@ -224,7 +234,7 @@
                  <number>0</number>
                 </property>
                 <property name="columnCount">
-                 <number>3</number>
+                 <number>5</number>
                 </property>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
@@ -242,6 +252,16 @@
                 <column>
                  <property name="text">
                   <string>Суббота</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Путь к файлу</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string> </string>
                  </property>
                 </column>
                </widget>
@@ -330,7 +350,7 @@
                  <number>0</number>
                 </property>
                 <property name="columnCount">
-                 <number>3</number>
+                 <number>5</number>
                 </property>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
@@ -348,6 +368,16 @@
                 <column>
                  <property name="text">
                   <string>Суббота</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Путь к файлу</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string> </string>
                  </property>
                 </column>
                </widget>

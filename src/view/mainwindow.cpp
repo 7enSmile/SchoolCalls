@@ -14,6 +14,10 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
                 table->model()->index(table->rowCount()-1 , 2 ),
                 createCheckBoxWidget(1,callManager->type)
                 );
+    table->setIndexWidget(
+                table->model()->index( table->rowCount()-1, 4 ),
+                createPushButton(callManager->type)
+                );
 
 
 
@@ -67,16 +71,22 @@ void MainWindow::fillTable(QTableWidget * table, CallsManager * callManager)
     int h;
     int m;
     int s;
+    QString patch;
     table->setRowCount(callManager->count);
     for (int i=0;i<callManager->count;i++){
-        callManager->get(i,h,m,s);
+        callManager->get(i,h,m,patch,s);
 
         table->setIndexWidget(
                     table->model()->index( i, 2 ),
                     createCheckBoxWidget(s,callManager->type)
                     );
+        table->setIndexWidget(
+                    table->model()->index( i, 4 ),
+                    createPushButton(callManager->type)
+                    );
         table->setItem(i, 0, new QTableWidgetItem(QString::number(h)));
         table->setItem(i, 1, new QTableWidgetItem(QString::number(m)));
+        table->setItem(i, 3, new QTableWidgetItem(patch));
     }
 
 }
@@ -158,7 +168,7 @@ void MainWindow::checkClickPhyMin(int)
 void MainWindow::clickedAddToLesson()
 {
     QObject::disconnect(ui->tableToLesson,&QTableWidget::itemChanged,
-                     this, &MainWindow::tableToLessonChanged);
+                        this, &MainWindow::tableToLessonChanged);
 
     addToTable(ui->tableToLesson,m_toLessonCallsManager);
 
@@ -179,14 +189,14 @@ void MainWindow::tableToLessonChanged(QTableWidgetItem *item)
     int index=item->row();
     int h = ui->tableToLesson->item(item->row(),0)->text().toInt();
     int m = ui->tableToLesson->item(item->row(),1)->text().toInt();
-    QString p = ui->lineEditPathtoLesson->text();
+    QString p = ui->tableToLesson->item(item->row(),3)->text();
     updateTable(index,h,m,p,m_toLessonCallsManager);
 }
 
 void MainWindow::clickedAddFromLesson()
 {
     QObject::disconnect(ui->tableFromLesson,&QTableWidget::itemChanged,
-                     this, &MainWindow::tableFromLessonChanged);
+                        this, &MainWindow::tableFromLessonChanged);
 
     addToTable(ui->tableFromLesson,m_fromLessonCallsManager);
 
@@ -205,7 +215,7 @@ void MainWindow::tableFromLessonChanged(QTableWidgetItem * item)
     int index=item->row();
     int h = ui->tableFromLesson->item(item->row(),0)->text().toInt();
     int m = ui->tableFromLesson->item(item->row(),1)->text().toInt();
-    QString p = ui->lineEditPatchFromLesson->text();
+    QString p = ui->tableFromLesson->item(item->row(),3)->text();
     updateTable(index,h,m,p,m_fromLessonCallsManager);
 
 }
@@ -213,12 +223,12 @@ void MainWindow::tableFromLessonChanged(QTableWidgetItem * item)
 void MainWindow::clickedAddPhysMin()
 {
     QObject::disconnect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                        this, &MainWindow::tablePhysMinChanged);
+
+    addToTable(ui->tablePhysMin,m_phyMinCallsManager);
+
+    QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
                      this, &MainWindow::tablePhysMinChanged);
-
-     addToTable(ui->tablePhysMin,m_phyMinCallsManager);
-
-     QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
-                      this, &MainWindow::tablePhysMinChanged);
 
 }
 
@@ -228,6 +238,28 @@ void MainWindow::clickedRemovePhysMin()
 
 }
 
+void MainWindow::clicedPatchToLesson()
+{
+    QPushButton* pb = qobject_cast< QPushButton* >(sender());
+    QModelIndex index = ui->tableToLesson->indexAt( pb->parentWidget()->pos() );
+    qDebug()<<index.row();
+
+}
+
+void MainWindow::clicedPatchFromLesson()
+{
+    QPushButton* pb = qobject_cast< QPushButton* >(sender());
+    QModelIndex index = ui->tableFromLesson->indexAt( pb->parentWidget()->pos() );
+    qDebug()<<index.row();
+}
+
+void MainWindow::clicedPatchPhysMin()
+{
+    QPushButton* pb = qobject_cast< QPushButton* >(sender());
+    QModelIndex index = ui->tablePhysMin->indexAt( pb->parentWidget()->pos() );
+    qDebug()<<index.row();
+}
+
 
 
 void MainWindow::tablePhysMinChanged(QTableWidgetItem *item)
@@ -235,7 +267,7 @@ void MainWindow::tablePhysMinChanged(QTableWidgetItem *item)
     int index=item->row();
     int h = ui->tablePhysMin->item(item->row(),0)->text().toInt();
     int m = ui->tablePhysMin->item(item->row(),1)->text().toInt();
-    QString p = ui->lineEditPathPhyMin->text();
+    QString p = ui->tablePhysMin->item(item->row(),3)->text();
     updateTable(index,h,m,p,m_phyMinCallsManager);
 
 }
@@ -270,5 +302,32 @@ QWidget* MainWindow::createCheckBoxWidget(int s, int type)
 
 
     return checkBoxWidget;
+}
+
+QWidget* MainWindow::createPushButton(int type)
+{
+    QWidget *pushButtonWidget = new QWidget();
+    QPushButton *pushButton = new QPushButton();
+    QHBoxLayout *layoutCheckBox = new QHBoxLayout(pushButtonWidget);
+    layoutCheckBox->addWidget(pushButton);
+    layoutCheckBox->setAlignment(Qt::AlignCenter);
+    layoutCheckBox->setContentsMargins(0,0,0,0);
+    pushButton->setText("Обзор");
+    switch (type) {
+    case 0:
+        connect( pushButton, SIGNAL(clicked()), SLOT( clicedPatchToLesson() ) );
+        break;
+    case 1:
+        connect( pushButton, SIGNAL(clicked()), SLOT( clicedPatchFromLesson() ) );
+        break;
+    case 2:
+        connect( pushButton, SIGNAL(clicked()), SLOT( clicedPatchPhysMin() ) );
+        break;
+    default:
+        break;
+    }
+
+    return pushButtonWidget;
+
 }
 

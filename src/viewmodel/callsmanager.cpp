@@ -53,10 +53,11 @@ void CallsManager::Find(int h, int m, int s, bool &flag, QString &p)
     }
 }
 
-void CallsManager::get(int index, int &h, int &m, int &s)
+void CallsManager::get(int index, int &h, int &m, QString &p, int &s)
 {
     h =  m_listOfCalls->at(index)->hours;
     m = m_listOfCalls->at(index)->minutes;
     s = m_listOfCalls->at(index)->saturday;
+    p = m_listOfCalls->at(index)->soundPatch;
 
 }

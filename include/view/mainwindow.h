@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 #include <QTableWidget>
 #include "include/view/tabledelegate.h"
 #include "include/viewmodel/callsmanager.h"
@@ -28,7 +29,15 @@ private:
     void removeFromTable(QTableWidget*,CallsManager *);
 
     void updateTable(int index,int h, int s, QString p, CallsManager *);
+
+    Ui::MainWindow *ui;
+
+    QWidget *createCheckBoxWidget(int, int type);
+
+    QWidget* createPushButton(int type);
+
 public:
+
     MainWindow(QWidget *parent = nullptr);
 
     ~MainWindow();
@@ -57,14 +66,15 @@ private slots:
 
     void clickedRemovePhysMin();
 
+    void clicedPatchToLesson();
 
+    void clicedPatchFromLesson();
+
+    void clicedPatchPhysMin();
 
     void tablePhysMinChanged(QTableWidgetItem *);
 
-private:
 
-    Ui::MainWindow *ui;
 
-    QWidget *createCheckBoxWidget(int, int type);
 };
 #endif // MAINWINDOW_H
