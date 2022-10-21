@@ -5,11 +5,14 @@
 
 class TableDelegate : public QStyledItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
 private:
+
     int maxValue;
+
 public:
+
     TableDelegate(int, QObject* parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;

@@ -1,19 +1,35 @@
 #include "../../include/model/dbmanager.h"
 
-DbManager::DbManager()
+void DbManager::init(QSqlDatabase db)
 {
-    m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName("db.db");
-    m_db.open();
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("db.db");
+    db.open();
+
+
 }
+
+void DbManager::close(QSqlDatabase db)
+{
+    QString qs;
+    qs.append(QSqlDatabase::database().connectionName());
+    QSqlDatabase::removeDatabase(qs);
+    db.close();
+
+
+
+}
+
 
 void DbManager::insert(Call *call)
 {
-    QSqlQuery query(m_db);
+    QSqlDatabase db;
+    DbManager::init(db);
+    QSqlQuery query(db);
     query.prepare(
-        "INSERT INTO Calls(hours, minutes, type, soundpatch, saturday, special)"
-        "VALUES(:hours, :minutes, :type, :soundpatch, :saturday, :special)"
-    );
+                "INSERT INTO Calls(hours, minutes, type, soundpatch, saturday, special)"
+                "VALUES(:hours, :minutes, :type, :soundpatch, :saturday, :special)"
+                );
     query.bindValue(":hours", call->hours);
     query.bindValue(":minutes", call->minutes);
     query.bindValue(":type", call->type);
@@ -21,35 +37,48 @@ void DbManager::insert(Call *call)
     query.bindValue(":saturday", call->saturday);
     query.bindValue(":special", call->special);
     query.exec();
+    query.finish();
+    DbManager::close(db);
 
 }
 
 void DbManager::remove(int id)
 {
-    QSqlQuery query(m_db);
+    QSqlDatabase db;
+    DbManager::init(db);
+
+    QSqlQuery query(db);
     QString str = QString("DELETE FROM Calls "
-                    "WHERE id=%1").arg(id);
+                          "WHERE id=%1").arg(id);
     query.exec(str);
+    query.finish();
+    DbManager::close(db);
 }
 
 void DbManager::update(Call *call)
 {
-    QSqlQuery query(m_db);
+    QSqlDatabase db;
+    DbManager::init(db);
+    QSqlQuery query(db);
     QString str = QString(
-        "UPDATE Calls "
-        "SET hours=%1, minutes=%2, type=%3, soundpatch='%4', saturday=%5, special=%6 "
-        "WHERE id=%7"
-    ).arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch)
+                "UPDATE Calls "
+                "SET hours=%1, minutes=%2, type=%3, soundpatch='%4', saturday=%5, special=%6 "
+                "WHERE id=%7"
+                ).arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch)
             .arg(call->saturday).arg(call->special).arg(call->id);
     query.exec(str);
+    query.finish();
+    DbManager::close(db);
 }
 
 QList<Call *>* DbManager::getListCall(int type, int special)
 {
+    QSqlDatabase db;
+    DbManager::init(db);
     QList <Call*> *listOfCalls = new QList <Call*>();
-    QSqlQuery query(m_db);
+    QSqlQuery query(db);
     QString str = QString("SELECT * FROM Calls "
-                    "WHERE type=%1 and special=%2").arg(type).arg(special);
+                          "WHERE type=%1 and special=%2").arg(type).arg(special);
     query.exec(str);
     while(query.next()){
         int id = query.value(0).toInt();
@@ -63,6 +92,8 @@ QList<Call *>* DbManager::getListCall(int type, int special)
         call->id = id;
         listOfCalls->append(call);
     }
+    query.finish();
+    DbManager::close(db);
     return listOfCalls;
 }
 
@@ -73,7 +104,7 @@ void DbManager::Find(int h, int m, int sp, bool &flag, Call& call)
     db.open();
     flag = false;
     QString str = QString("SELECT * FROM Calls "
-                    "WHERE hours=%1 AND minutes=%2 AND special=%3").arg(h).arg(m).arg(sp);
+                          "WHERE hours=%1 AND minutes=%2 AND special=%3").arg(h).arg(m).arg(sp);
     QSqlQuery query(db);
     if(query.exec(str)){
         if (query.next()){
@@ -87,16 +118,21 @@ void DbManager::Find(int h, int m, int sp, bool &flag, Call& call)
             call.special = query.value(6).toInt();
         }
     }
+    query.finish();
     db.close();
 }
 
 int DbManager::getId(Call *call)
 {
+    QSqlDatabase db;
+    DbManager::init(db);
     QString str = QString("SELECT id FROM Calls "
-                    "WHERE hours=%1 and minutes=%2 and type=%3 and soundpatch='%4'and saturday=%5 and special =%6").
+                          "WHERE hours=%1 and minutes=%2 and type=%3 and soundpatch='%4'and saturday=%5 and special =%6").
             arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch).arg(call->saturday).arg(call->special);
-    QSqlQuery query(m_db);
+    QSqlQuery query(db);
     query.exec(str);
     query.next();
+    DbManager::close(db);
+
     return query.value(0).toInt();
 }

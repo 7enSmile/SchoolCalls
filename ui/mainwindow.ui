@@ -296,7 +296,11 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_2"/>
+              <widget class="QLineEdit" name="lineEditPatchFromLesson">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_4">
@@ -398,7 +402,11 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_3"/>
+              <widget class="QLineEdit" name="lineEditPathPhyMin">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_7">

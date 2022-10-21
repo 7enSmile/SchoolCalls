@@ -34,6 +34,7 @@ public:
     ~MainWindow();
 
 private slots:
+
     void checkClickToLesson(int);
 
     void checkClickFromLesson(int);
@@ -45,6 +46,20 @@ private slots:
     void clickedRemoveToLesson();
 
     void tableToLessonChanged(QTableWidgetItem *);
+
+    void clickedAddFromLesson();
+
+    void clickedRemoveFromLesson();
+
+    void tableFromLessonChanged(QTableWidgetItem *);
+
+    void clickedAddPhysMin();
+
+    void clickedRemovePhysMin();
+
+
+
+    void tablePhysMinChanged(QTableWidgetItem *);
 
 private:
 

@@ -4,8 +4,8 @@
 
 CallsManager::CallsManager(int type_, int special)
 {
-    m_dbmanager = new DbManager();
-    m_listOfCalls = m_dbmanager->getListCall(type_,special);
+
+    m_listOfCalls = DbManager::getListCall(type_,special);
     count = m_listOfCalls->size();
     type = type_;
 
@@ -14,15 +14,15 @@ CallsManager::CallsManager(int type_, int special)
 void CallsManager::insert(int h, int m, QString p, int s, int spt)
 {
     Call* call = new Call(h,m,type,p,s,spt);
-    m_dbmanager->insert(call);
-    call->id = m_dbmanager->getId(call);
+    DbManager::insert(call);
+    call->id = DbManager::getId(call);
     m_listOfCalls->push_back(call);
     count++;
 }
 
 void CallsManager::remove(int index)
 {
-    m_dbmanager->remove(m_listOfCalls->at(index)->id);
+    DbManager::remove(m_listOfCalls->at(index)->id);
     m_listOfCalls->removeAt(index);
     count--;
 }
@@ -32,13 +32,13 @@ void CallsManager::update(int index, int h, int m, QString p)
     m_listOfCalls->at(index)->hours = h;
     m_listOfCalls->at(index)->minutes = m;
     m_listOfCalls->at(index)->soundPatch = p;
-    m_dbmanager->update(m_listOfCalls->at(index));
+    DbManager::update(m_listOfCalls->at(index));
 }
 
 void CallsManager::updateS(int index)
 {
     m_listOfCalls->at(index)->saturday= !m_listOfCalls->at(index)->saturday;
-    m_dbmanager->update(m_listOfCalls->at(index));
+    DbManager::update(m_listOfCalls->at(index));
 
 }
 

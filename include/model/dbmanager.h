@@ -9,22 +9,28 @@ class DbManager
 {
 private:
 
-    QSqlDatabase m_db;
+    void static init(QSqlDatabase db);
+    void static close(QSqlDatabase db);
 
 public:
-    DbManager();
 
-    void insert(Call* call);
 
-    void remove(int);
 
-    void update(Call *call);
 
-    QList<Call*>* getListCall(int type, int special);
+
+
+
+    void static insert(Call* call);
+
+    void static remove(int);
+
+    void static update(Call *call);
+
+    static QList<Call*>* getListCall(int type, int special);
 
     static void Find(int,int ,int, bool&, Call&);
 
-    int getId(Call* call);
+    static int getId(Call* call);
 
 };
 
