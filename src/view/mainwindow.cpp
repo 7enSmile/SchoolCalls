@@ -6,15 +6,8 @@
 
 void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 {
-    QObject::disconnect(table,SIGNAL
-                        (itemChanged(QTableWidgetItem *)), this,
-                        SLOT(tableToLessonChanged(QTableWidgetItem *)));
-    QObject::disconnect(table,SIGNAL
-                        (itemChanged(QTableWidgetItem *)), this,
-                        SLOT(tableFromLessonChanged(QTableWidgetItem *)));
-    QObject::disconnect(table,SIGNAL
-                        (itemChanged(QTableWidgetItem *)), this,
-                        SLOT(tablePhysMinChanged(QTableWidgetItem *)));
+
+
     table->insertRow(table->rowCount());
 
     table->setIndexWidget(
@@ -41,15 +34,8 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 
     callManager->insert(table->item(table->rowCount()-1,0)->text().toInt(), table->item(table->rowCount()-1,1)->text().toInt(), "1.mp3", 1, 0);
 
-    QObject::connect(table,SIGNAL
-                     (itemChanged(QTableWidgetItem *)), this,
-                     SLOT(tableToLessonChanged(QTableWidgetItem *)));
-    QObject::connect(table,SIGNAL
-                     (itemChanged(QTableWidgetItem *)), this,
-                     SLOT(tableFromLessonChanged(QTableWidgetItem *)));
-    QObject::connect(table,SIGNAL
-                        (itemChanged(QTableWidgetItem *)), this,
-                        SLOT(tablePhysMinChanged(QTableWidgetItem *)));
+
+
 
 
 }
@@ -59,7 +45,7 @@ void MainWindow::configTable(QTableWidget * table, int type)
 
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table->setItemDelegateForColumn(0,new TableDelegate(24,table));
-    table->setItemDelegateForColumn(1,new TableDelegate(60,table));
+    table->setItemDelegateForColumn(1,new TableDelegate(59,table));
 
     switch (type) {
     case 0:
@@ -126,15 +112,15 @@ MainWindow::MainWindow(QWidget *parent)
     configTable(ui->tablePhysMin,2);
     QObject::connect(ui->addToLesson, SIGNAL(clicked()),this, SLOT(clickedAddToLesson()));
     QObject::connect(ui->removeToLesson, SIGNAL(clicked()),this, SLOT(clickedRemoveToLesson()));
-    QObject::connect(ui->tableToLesson,SIGNAL(itemChanged(QTableWidgetItem *)),
-                     this, SLOT(tableToLessonChanged(QTableWidgetItem *)));
-    QObject::connect(ui->addFromLesson, SIGNAL(clicked()),this, SLOT(clickedAddFromLesson()));
+    QObject::connect(ui->tableToLesson,&QTableWidget::itemChanged,
+                     this, &MainWindow::tableToLessonChanged);
+    QObject::connect(ui->addFromLesson, &QAbstractButton::clicked,this, &MainWindow::clickedAddFromLesson);
     QObject::connect(ui->removeFromLesson, SIGNAL(clicked()),this, SLOT(clickedRemoveFromLesson()));
-    QObject::connect(ui->tableFromLesson,SIGNAL(itemChanged(QTableWidgetItem *)),
-                     this, SLOT(tableFromLessonChanged(QTableWidgetItem *)));
+    QObject::connect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                     this, &MainWindow::tableFromLessonChanged);
     QObject::connect(ui->addPhysMin, SIGNAL(clicked()),this, SLOT(clickedAddPhysMin()));
-    QObject::connect(ui->tablePhysMin,SIGNAL(itemChanged(QTableWidgetItem *)),
-                     this, SLOT(tablePhysMinChanged(QTableWidgetItem *)));
+    QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                     this, &MainWindow::tablePhysMinChanged);
     QObject::connect(ui->removePhysMin, SIGNAL(clicked()),this, SLOT(clickedRemovePhysMin()));
 
 
@@ -171,8 +157,13 @@ void MainWindow::checkClickPhyMin(int)
 
 void MainWindow::clickedAddToLesson()
 {
+    QObject::disconnect(ui->tableToLesson,&QTableWidget::itemChanged,
+                     this, &MainWindow::tableToLessonChanged);
+
     addToTable(ui->tableToLesson,m_toLessonCallsManager);
 
+    QObject::connect(ui->tableToLesson,&QTableWidget::itemChanged,
+                     this, &MainWindow::tableToLessonChanged);
 }
 
 void MainWindow::clickedRemoveToLesson()
@@ -183,6 +174,8 @@ void MainWindow::clickedRemoveToLesson()
 
 void MainWindow::tableToLessonChanged(QTableWidgetItem *item)
 {
+
+
     int index=item->row();
     int h = ui->tableToLesson->item(item->row(),0)->text().toInt();
     int m = ui->tableToLesson->item(item->row(),1)->text().toInt();
@@ -192,7 +185,13 @@ void MainWindow::tableToLessonChanged(QTableWidgetItem *item)
 
 void MainWindow::clickedAddFromLesson()
 {
+    QObject::disconnect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                     this, &MainWindow::tableFromLessonChanged);
+
     addToTable(ui->tableFromLesson,m_fromLessonCallsManager);
+
+    QObject::connect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                     this, &MainWindow::tableFromLessonChanged);
 }
 
 void MainWindow::clickedRemoveFromLesson()
@@ -213,7 +212,13 @@ void MainWindow::tableFromLessonChanged(QTableWidgetItem * item)
 
 void MainWindow::clickedAddPhysMin()
 {
+    QObject::disconnect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                     this, &MainWindow::tablePhysMinChanged);
+
      addToTable(ui->tablePhysMin,m_phyMinCallsManager);
+
+     QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                      this, &MainWindow::tablePhysMinChanged);
 
 }
 
