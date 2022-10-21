@@ -19,7 +19,7 @@ void DbManager::insert(Call *call)
     query.bindValue(":type", call->type);
     query.bindValue(":soundpatch", call->soundPatch);
     query.bindValue(":saturday", call->saturday);
-    query.bindValue("::special", call->special);
+    query.bindValue(":special", call->special);
     query.exec();
 
 }
@@ -41,14 +41,15 @@ void DbManager::update(Call *call)
         "WHERE id=%7"
     ).arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch)
             .arg(call->saturday).arg(call->special).arg(call->id);
+    query.exec(str);
 }
 
-QList<Call *>* DbManager::getListCall(int type)
+QList<Call *>* DbManager::getListCall(int type, int special)
 {
     QList <Call*> *listOfCalls = new QList <Call*>();
     QSqlQuery query(m_db);
     QString str = QString("SELECT * FROM Calls "
-                    "WHERE type=%1").arg(type);
+                    "WHERE type=%1 and special=%2").arg(type).arg(special);
     query.exec(str);
     while(query.next()){
         int id = query.value(0).toInt();
@@ -58,20 +59,21 @@ QList<Call *>* DbManager::getListCall(int type)
         QString soundPatch = query.value(4).toString();
         int saturday = query.value(5).toInt();
         int special = query.value(6).toInt();
-        Call *call = new Call(id,hours,minutes,type,soundPatch,saturday,special);
+        Call *call = new Call(hours,minutes,type,soundPatch,saturday,special);
+        call->id = id;
         listOfCalls->append(call);
     }
     return listOfCalls;
 }
 
-void DbManager::Find(int h, int m, bool &flag, Call& call)
+void DbManager::Find(int h, int m, int sp, bool &flag, Call& call)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("db.db");
     db.open();
     flag = false;
     QString str = QString("SELECT * FROM Calls "
-                    "WHERE hours=%1 AND minutes=%2").arg(h).arg(m);
+                    "WHERE hours=%1 AND minutes=%2 AND special=%3").arg(h).arg(m).arg(sp);
     QSqlQuery query(db);
     if(query.exec(str)){
         if (query.next()){

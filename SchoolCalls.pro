@@ -11,12 +11,16 @@ CONFIG += c++17
 SOURCES += main.cpp \
     src/model/dbmanager.cpp \
     src/view/mainwindow.cpp\
-    src/viewmodel/call.cpp
+    src/view/tabledelegate.cpp \
+    src/viewmodel/call.cpp \
+    src/viewmodel/callsmanager.cpp
 
 
 HEADERS += include/view/mainwindow.h \
     include/model/dbmanager.h \
-    include/viewmodel/call.h
+    include/view/tabledelegate.h \
+    include/viewmodel/call.h \
+    include/viewmodel/callsmanager.h
 
 
 FORMS += ui/mainwindow.ui

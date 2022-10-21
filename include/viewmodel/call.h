@@ -8,14 +8,23 @@
 class Call
 {
 public:
+
     int id;
+
     int hours;
+
     int minutes;
+
     int type;
+
     QString soundPatch;
+
     int saturday;
+
     int special;
-    Call(int,int, int, int, QString, int, int);
+
+    Call(int, int, int, QString, int, int);
+
     Call();
 };
 
