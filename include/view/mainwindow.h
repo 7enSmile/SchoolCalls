@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QTableWidget>
+#include <QtGui>
+#include <QFileDialog>
 #include "include/view/tabledelegate.h"
 #include "include/viewmodel/callsmanager.h"
 QT_BEGIN_NAMESPACE
@@ -35,6 +37,11 @@ private:
     QWidget *createCheckBoxWidget(int, int type);
 
     QWidget* createPushButton(int type);
+
+    void updatePatchToCall(int index, int h, int m, CallsManager *callManager,
+                           QTableWidget* table);
+    void updatePatchToCallAll(CallsManager *callManager,
+                           QTableWidget* table);
 
 public:
 
@@ -73,6 +80,12 @@ private slots:
     void clicedPatchPhysMin();
 
     void tablePhysMinChanged(QTableWidgetItem *);
+
+    void clickedPatchToAllToLessonCall();
+
+    void clickedPatchToAllFromLessonCall();
+
+    void clickedPatchToAllPhysMin();
 
 
 

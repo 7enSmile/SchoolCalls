@@ -16,6 +16,8 @@ public:
 
     int type;
 
+    int special;
+
     CallsManager(int type_,int special);
 
     void insert(int h, int m, QString p, int s, int spt);

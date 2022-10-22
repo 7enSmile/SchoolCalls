@@ -16,43 +16,72 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>Время</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QLabel" name="timeLAbel">
-         <property name="font">
-          <font>
-           <pointsize>18</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="dateLabel">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Время</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="timeLAbel">
+           <property name="font">
+            <font>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="dateLabel">
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Тест</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox">
@@ -99,7 +128,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="toLesson">
           <attribute name="title">
@@ -145,7 +174,7 @@
                 </column>
                 <column>
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </column>
                </widget>
@@ -200,16 +229,9 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEditPathtoLesson">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="pushButtonPatchToAllToLesson">
                <property name="text">
-                <string>PushButton</string>
+                <string>Изменить звук для всех звонков</string>
                </property>
               </widget>
              </item>
@@ -261,7 +283,7 @@
                 </column>
                 <column>
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </column>
                </widget>
@@ -316,16 +338,9 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEditPatchFromLesson">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_4">
+              <widget class="QPushButton" name="pushButtonPatchToAllFromLesson">
                <property name="text">
-                <string>PushButton</string>
+                <string>Изменить звук для всех звонков</string>
                </property>
               </widget>
              </item>
@@ -377,7 +392,7 @@
                 </column>
                 <column>
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </column>
                </widget>
@@ -432,16 +447,9 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEditPathPhyMin">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_7">
+              <widget class="QPushButton" name="pushButtonPatchToPhysMin">
                <property name="text">
-                <string>PushButton</string>
+                <string>Изменить звук для всех звонков</string>
                </property>
               </widget>
              </item>
@@ -460,17 +468,6 @@
      </widget>
     </item>
    </layout>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>100</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_9"/>
-   </widget>
   </widget>
  </widget>
  <resources/>

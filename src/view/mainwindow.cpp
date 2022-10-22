@@ -8,6 +8,7 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 {
 
 
+
     table->insertRow(table->rowCount());
 
     table->setIndexWidget(
@@ -21,22 +22,29 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 
 
 
+    QString patch;
+
     if (table->rowCount()!=1){
 
         QString textH = table->item(table->rowCount()-2,0)->text();
         QString textM = table->item(table->rowCount()-2,1)->text();
+        patch = table->item(table->rowCount()-2,3)->text();
         table->setItem(table->rowCount()-1,0,new QTableWidgetItem(textH));
         table->setItem(table->rowCount()-1,1,new QTableWidgetItem(textM));
+        table->setItem(table->rowCount()-1,3,new QTableWidgetItem(patch));
+
 
     }else{
 
         table->setItem(table->rowCount()-1,0,new QTableWidgetItem("8"));
         table->setItem(table->rowCount()-1,1,new QTableWidgetItem("30"));
+        patch = "";
     }
 
 
 
-    callManager->insert(table->item(table->rowCount()-1,0)->text().toInt(), table->item(table->rowCount()-1,1)->text().toInt(), "1.mp3", 1, 0);
+    callManager->insert(table->item(table->rowCount()-1,0)->text().toInt(),
+                        table->item(table->rowCount()-1,1)->text().toInt(), patch, 1, callManager->special);
 
 
 
@@ -50,6 +58,7 @@ void MainWindow::configTable(QTableWidget * table, int type)
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table->setItemDelegateForColumn(0,new TableDelegate(24,table));
     table->setItemDelegateForColumn(1,new TableDelegate(59,table));
+    //table->setColumnWidth(3,150);
 
     switch (type) {
     case 0:
@@ -113,6 +122,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("Звонки");
     ui->tabWidget->setStyleSheet("QTabWidget::pane { border: 0; }");
     m_toLessonCallsManager = new CallsManager(0,0);
     m_fromLessonCallsManager = new CallsManager(1,0);
@@ -132,11 +142,12 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
                      this, &MainWindow::tablePhysMinChanged);
     QObject::connect(ui->removePhysMin, SIGNAL(clicked()),this, SLOT(clickedRemovePhysMin()));
-
-
-
-
-
+    QObject::connect(ui->pushButtonPatchToAllToLesson, SIGNAL(clicked()),
+                     this, SLOT(clickedPatchToAllToLessonCall()));
+    QObject::connect(ui->pushButtonPatchToAllFromLesson, SIGNAL(clicked()),
+                     this, SLOT(clickedPatchToAllFromLessonCall()));
+    QObject::connect(ui->pushButtonPatchToPhysMin, SIGNAL(clicked()),
+                     this, SLOT(clickedPatchToAllPhysMin()));
 }
 
 MainWindow::~MainWindow()
@@ -242,22 +253,29 @@ void MainWindow::clicedPatchToLesson()
 {
     QPushButton* pb = qobject_cast< QPushButton* >(sender());
     QModelIndex index = ui->tableToLesson->indexAt( pb->parentWidget()->pos() );
-    qDebug()<<index.row();
-
+    int h = ui->tableToLesson->item(index.row(),0)->text().toInt();
+    int m = ui->tableToLesson->item(index.row(),1)->text().toInt();
+    updatePatchToCall(index.row(),h,m,m_toLessonCallsManager,ui->tableToLesson);
 }
 
 void MainWindow::clicedPatchFromLesson()
 {
     QPushButton* pb = qobject_cast< QPushButton* >(sender());
     QModelIndex index = ui->tableFromLesson->indexAt( pb->parentWidget()->pos() );
-    qDebug()<<index.row();
+    int h = ui->tableFromLesson->item(index.row(),0)->text().toInt();
+    int m = ui->tableFromLesson->item(index.row(),1)->text().toInt();
+    updatePatchToCall(index.row(),h,m,m_fromLessonCallsManager,ui->tableFromLesson);
+
 }
 
 void MainWindow::clicedPatchPhysMin()
 {
     QPushButton* pb = qobject_cast< QPushButton* >(sender());
     QModelIndex index = ui->tablePhysMin->indexAt( pb->parentWidget()->pos() );
-    qDebug()<<index.row();
+    int h = ui->tablePhysMin->item(index.row(),0)->text().toInt();
+    int m = ui->tablePhysMin->item(index.row(),1)->text().toInt();
+    updatePatchToCall(index.row(),h,m,m_phyMinCallsManager,ui->tablePhysMin);
+
 }
 
 
@@ -271,6 +289,27 @@ void MainWindow::tablePhysMinChanged(QTableWidgetItem *item)
     updateTable(index,h,m,p,m_phyMinCallsManager);
 
 }
+
+void MainWindow::clickedPatchToAllToLessonCall()
+{
+    updatePatchToCallAll(m_toLessonCallsManager,ui->tableToLesson);
+
+
+}
+
+void MainWindow::clickedPatchToAllFromLessonCall()
+{
+    updatePatchToCallAll(m_fromLessonCallsManager,ui->tableFromLesson);
+
+}
+
+void MainWindow::clickedPatchToAllPhysMin()
+{
+    updatePatchToCallAll(m_phyMinCallsManager,ui->tablePhysMin);
+
+}
+
+
 
 QWidget* MainWindow::createCheckBoxWidget(int s, int type)
 {
@@ -328,6 +367,44 @@ QWidget* MainWindow::createPushButton(int type)
     }
 
     return pushButtonWidget;
+
+}
+
+void MainWindow::updatePatchToCall(int index, int h, int m,
+                                   CallsManager *callManager,
+                                   QTableWidget *table)
+{
+    QString p = QFileDialog::getOpenFileName(this,
+                                             QString::fromUtf8("Открыть файл"),
+                                             QDir::currentPath(),
+                                             "Звуки (*.mp3 *.wav)");
+    if (!p.isEmpty()){
+        callManager->update(index,h,m,p);
+        table->setItem(index,3,new QTableWidgetItem(p));
+    }
+}
+
+void MainWindow::updatePatchToCallAll(CallsManager *callManager, QTableWidget *table)
+{
+    QString p = QFileDialog::getOpenFileName(this,
+                                             QString::fromUtf8("Открыть файл"),
+                                             QDir::currentPath(),
+                                             "Звуки (*.mp3 *.wav)");
+    if (!p.isEmpty()){
+
+        int h;
+        int m;
+
+        for (int i = 0; i < table->rowCount(); i++){
+
+            h = table->item(i,0)->text().toInt();
+            m = table->item(i,1)->text().toInt();
+            table->setItem(i,3,new QTableWidgetItem(p));
+            callManager->update(i,h,m,p);
+
+        }
+    }
+
 
 }
 

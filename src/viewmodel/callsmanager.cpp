@@ -2,12 +2,13 @@
 
 
 
-CallsManager::CallsManager(int type_, int special)
+CallsManager::CallsManager(int type_, int special_)
 {
 
-    m_listOfCalls = DbManager::getListCall(type_,special);
+    m_listOfCalls = DbManager::getListCall(type_,special_);
     count = m_listOfCalls->size();
     type = type_;
+    special = special_;
 
 }
 
