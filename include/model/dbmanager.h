@@ -3,6 +3,8 @@
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QList>
+#include <QtSql>
 #include "include/viewmodel/call.h"
 
 class DbManager

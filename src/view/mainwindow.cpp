@@ -419,11 +419,10 @@ void MainWindow::updatePatchToCallAll(CallsManager *callManager, QTableWidget *t
 void MainWindow::playSound(QString patch)
 {
     QMediaPlayer *player = new QMediaPlayer;
-    QAudioOutput *audioOutput = new QAudioOutput;
-    player->setAudioOutput(audioOutput);
-    player->setSource(QUrl::fromLocalFile(patch));
-
+    player->setMedia(QUrl(patch));
+    player->setVolume(50);
     player->play();
+
 
 }
 
@@ -433,7 +432,7 @@ void MainWindow::updateTime()
     int date = QString::number(dateToday.dayOfWeek()).toInt();
     switch (date) {
     case 1:
-        ui->dateLabel->setText("Подельник");
+        ui->dateLabel->setText("Понедельник");
         break;
     case 2:
         ui->dateLabel->setText("Вторник");

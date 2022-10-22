@@ -10,6 +10,7 @@
 #include <QAudioOutput>
 #include "include/view/tabledelegate.h"
 #include "include/viewmodel/callsmanager.h"
+#include <QSound>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

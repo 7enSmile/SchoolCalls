@@ -2,7 +2,7 @@
 #define CALLSMANAGER_H
 #include "include/viewmodel/call.h"
 #include "include/model/dbmanager.h"
-
+#include <QList>
 class CallsManager
 {
 private:
