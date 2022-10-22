@@ -39,6 +39,7 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
         table->setItem(table->rowCount()-1,0,new QTableWidgetItem("8"));
         table->setItem(table->rowCount()-1,1,new QTableWidgetItem("30"));
         patch = "";
+        table->setItem(table->rowCount()-1,3,new QTableWidgetItem(patch));
     }
 
 
@@ -102,7 +103,7 @@ void MainWindow::fillTable(QTableWidget * table, CallsManager * callManager)
 
 void MainWindow::removeFromTable(QTableWidget *table, CallsManager *callManager)
 {
-    if (table->rowCount()>0){
+    if (callManager->count!=0){
         callManager->remove(table->rowCount()-1);
         table->removeRow(table->rowCount()-1);
     }
