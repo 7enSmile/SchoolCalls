@@ -148,6 +148,14 @@ MainWindow::MainWindow(QWidget *parent)
                      this, SLOT(clickedPatchToAllFromLessonCall()));
     QObject::connect(ui->pushButtonPatchToPhysMin, SIGNAL(clicked()),
                      this, SLOT(clickedPatchToAllPhysMin()));
+    QObject::connect(ui->pushButtonTestSound, SIGNAL(clicked()),
+                     this, SLOT(clickedPlaySoundTest()));
+
+    tmr = new QTimer();
+    tmr->setInterval(60000);
+    connect(tmr, SIGNAL(timeout()), this, SLOT(updateTime()));
+    updateTime();
+    tmr->start();
 }
 
 MainWindow::~MainWindow()
@@ -405,6 +413,68 @@ void MainWindow::updatePatchToCallAll(CallsManager *callManager, QTableWidget *t
         }
     }
 
+
+}
+
+void MainWindow::playSound(QString patch)
+{
+    QMediaPlayer *player = new QMediaPlayer;
+    QAudioOutput *audioOutput = new QAudioOutput;
+    player->setAudioOutput(audioOutput);
+    player->setSource(QUrl::fromLocalFile(patch));
+
+    player->play();
+
+}
+
+void MainWindow::updateTime()
+{
+    QDate dateToday = QDate::currentDate();
+    int date = QString::number(dateToday.dayOfWeek()).toInt();
+    switch (date) {
+    case 1:
+        ui->dateLabel->setText("Подельник");
+        break;
+    case 2:
+        ui->dateLabel->setText("Вторник");
+        break;
+    case 3:
+        ui->dateLabel->setText("Среда");
+        break;
+    case 4:
+        ui->dateLabel->setText("Четверг");
+        break;
+    case 5:
+        ui->dateLabel->setText("Пятница");
+        break;
+    case 6:
+        ui->dateLabel->setText("Суббота");
+        break;
+    case 7:
+        ui->dateLabel->setText("Воскресенье");
+        break;
+    default:
+        break;
+    }
+
+    if(QTime::currentTime().minute() > 9){
+
+        ui->timeLabel->setText(QString(
+                                   QString::number(QTime::currentTime().hour())+
+                                   ":")+
+                               QString::number(QTime::currentTime().minute()));
+    }else{
+        ui->timeLabel->setText(QString(
+                                   QString::number(QTime::currentTime().hour())+
+                                   ":0")+
+                               QString::number(QTime::currentTime().minute()));
+
+    }
+}
+
+void MainWindow::clickedPlaySoundTest()
+{
+    playSound("qrc:/sound/ring.mp3");
 
 }
 

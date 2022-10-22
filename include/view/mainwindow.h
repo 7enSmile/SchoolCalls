@@ -6,6 +6,8 @@
 #include <QTableWidget>
 #include <QtGui>
 #include <QFileDialog>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 #include "include/view/tabledelegate.h"
 #include "include/viewmodel/callsmanager.h"
 QT_BEGIN_NAMESPACE
@@ -15,7 +17,9 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 private:
+
     CallsManager *m_toLessonCallsManager;
 
     CallsManager *m_fromLessonCallsManager;
@@ -42,6 +46,10 @@ private:
                            QTableWidget* table);
     void updatePatchToCallAll(CallsManager *callManager,
                            QTableWidget* table);
+
+    QTimer *tmr;
+
+    void playSound(QString patch);
 
 public:
 
@@ -86,6 +94,10 @@ private slots:
     void clickedPatchToAllFromLessonCall();
 
     void clickedPatchToAllPhysMin();
+
+    void updateTime();
+
+    void clickedPlaySoundTest();
 
 
 
