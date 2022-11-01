@@ -97,14 +97,13 @@ QList<Call *>* DbManager::getListCall(int type, int special)
     return listOfCalls;
 }
 
-void DbManager::Find(int h, int m, int sp, bool &flag, Call& call)
+void DbManager::Find(int h, int m, int sp, int s, bool &flag, Call& call)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("db.db");
-    db.open();
+    QSqlDatabase db;
+    DbManager::init(db);
     flag = false;
     QString str = QString("SELECT * FROM Calls "
-                          "WHERE hours=%1 AND minutes=%2 AND special=%3").arg(h).arg(m).arg(sp);
+                          "WHERE hours=%1 AND minutes=%2 AND special=%3 AND saturday=%4 ").arg(h).arg(m).arg(sp).arg(s);
     QSqlQuery query(db);
     if(query.exec(str)){
         if (query.next()){
@@ -119,7 +118,8 @@ void DbManager::Find(int h, int m, int sp, bool &flag, Call& call)
         }
     }
     query.finish();
-    db.close();
+    DbManager::close(db);
+
 }
 
 int DbManager::getId(Call *call)
@@ -133,6 +133,5 @@ int DbManager::getId(Call *call)
     query.exec(str);
     query.next();
     DbManager::close(db);
-
     return query.value(0).toInt();
 }

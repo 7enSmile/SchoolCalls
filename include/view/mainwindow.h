@@ -11,6 +11,8 @@
 #include "include/view/tabledelegate.h"
 #include "include/viewmodel/callsmanager.h"
 #include <QSound>
+#include <QSettings>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -49,6 +51,9 @@ private:
                            QTableWidget* table);
 
     QTimer *tmr;
+
+    int m_minutes = 0;
+    int m_hours = 0;
 
     void playSound(QString patch);
 
@@ -99,6 +104,8 @@ private slots:
     void updateTime();
 
     void clickedPlaySoundTest();
+
+    void clickedChangeWarningCall();
 
 
 

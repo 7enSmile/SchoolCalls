@@ -92,7 +92,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
-          <widget class="QComboBox" name="comboBox">
+          <widget class="QComboBox" name="comboBoxType">
            <item>
             <property name="text">
              <string>Включено</string>
@@ -215,6 +215,20 @@
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLineEdit" name="lineEditWarningCall">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonChangeWarningCall">
+               <property name="text">
+                <string>Изменить звук предупреждения</string>
+               </property>
+              </widget>
+             </item>
              <item>
               <spacer name="horizontalSpacer">
                <property name="orientation">

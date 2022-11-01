@@ -13,7 +13,7 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 
     table->setIndexWidget(
                 table->model()->index(table->rowCount()-1 , 2 ),
-                createCheckBoxWidget(1,callManager->type)
+                createCheckBoxWidget(0,callManager->type)
                 );
     table->setIndexWidget(
                 table->model()->index( table->rowCount()-1, 4 ),
@@ -45,7 +45,7 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 
 
     callManager->insert(table->item(table->rowCount()-1,0)->text().toInt(),
-                        table->item(table->rowCount()-1,1)->text().toInt(), patch, 1, callManager->special);
+                        table->item(table->rowCount()-1,1)->text().toInt(), patch, 0, callManager->special);
 
 
 
@@ -151,9 +151,14 @@ MainWindow::MainWindow(QWidget *parent)
                      this, SLOT(clickedPatchToAllPhysMin()));
     QObject::connect(ui->pushButtonTestSound, SIGNAL(clicked()),
                      this, SLOT(clickedPlaySoundTest()));
+    QObject::connect(ui->pushButtonChangeWarningCall, SIGNAL(clicked()),
+                     this, SLOT(clickedChangeWarningCall()));
+    QSettings settings( "settings.conf", QSettings::IniFormat );
+    settings.beginGroup( "WarningCall" );
+    ui->lineEditWarningCall->setText(settings.value("patch",-1).toString());
 
     tmr = new QTimer();
-    tmr->setInterval(60000);
+    tmr->setInterval(30000);
     connect(tmr, SIGNAL(timeout()), this, SLOT(updateTime()));
     updateTime();
     tmr->start();
@@ -470,11 +475,106 @@ void MainWindow::updateTime()
                                QString::number(QTime::currentTime().minute()));
 
     }
+    if (QTime::currentTime().minute() != m_minutes && dateToday.dayOfWeek() != 7){
+        QSettings settings( "settings.conf", QSettings::IniFormat );
+        settings.beginGroup( "WarningCall" );
+        m_minutes = QTime::currentTime().minute();
+        m_hours = QTime::currentTime().hour();
+        QString patch;
+        int type;
+        bool flag;
+        switch (ui->comboBoxType->currentIndex()) {
+        case 0:
+
+            if (m_minutes + 3 < 60){
+                if (dateToday.dayOfWeek() == 6){
+
+                    CallsManager::Find(m_hours,m_minutes + 3, 0, 1, flag, patch, type);
+
+                } else {
+
+                    CallsManager::Find(m_hours,m_minutes + 3, 0, 0, flag, patch, type);
+
+                }
+
+                if (flag && type == 0){
+
+                    playSound(settings.value("patch",-1).toString());
+
+                }
+
+            } else {
+
+                if (dateToday.dayOfWeek() == 6){
+
+                    CallsManager::Find(m_hours,60 - (m_minutes + 3), 0, 1, flag, patch, type);
+
+                } else {
+
+                    CallsManager::Find(m_hours,60 - (m_minutes + 3), 0, 0, flag, patch, type);
+
+                }
+
+
+                if (flag && type == 0){
+
+                    playSound(settings.value("patch",-1).toString());
+
+                }
+
+            }
+
+            if (dateToday.dayOfWeek() == 6){
+
+                CallsManager::Find(m_hours,m_minutes, 0, 1, flag, patch, type);
+
+            } else {
+
+                CallsManager::Find(m_hours,m_minutes, 0, 0, flag, patch, type);
+
+            }
+
+            if (flag){
+
+                playSound(patch);
+
+            }
+
+            break;
+
+        default:
+
+            break;
+
+        }
+
+
+    }
+
+
 }
 
 void MainWindow::clickedPlaySoundTest()
 {
     playSound("qrc:/sound/ring.mp3");
+
+}
+
+void MainWindow::clickedChangeWarningCall()
+{
+    QString p = QFileDialog::getOpenFileName(this,
+                                             QString::fromUtf8("Открыть файл"),
+                                             QDir::currentPath(),
+                                             "Звуки (*.mp3 *.wav)");
+    if (!p.isEmpty()){
+
+        QSettings settings( "settings.conf", QSettings::IniFormat );
+        settings.beginGroup( "WarningCall" );
+        settings.setValue("patch", p);
+        ui->lineEditWarningCall->setText(p);
+
+    }
+
 
 }
 

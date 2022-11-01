@@ -28,7 +28,7 @@ public:
 
     void updateS(int index);
 
-    static void Find(int h, int m, int s, bool& flag, QString&p);
+    static void Find(int h, int m, int sp, int s, bool& flag, QString&p, int &type);
 
     void get(int index, int&h, int&m, QString&p, int& s);
 

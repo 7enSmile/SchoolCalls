@@ -30,7 +30,7 @@ public:
 
     static QList<Call*>* getListCall(int type, int special);
 
-    static void Find(int,int ,int, bool&, Call&);
+    static void Find(int , int ,int, int, bool&, Call&);
 
     static int getId(Call* call);
 

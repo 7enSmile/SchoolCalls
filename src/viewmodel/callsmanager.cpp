@@ -45,12 +45,13 @@ void CallsManager::updateS(int index)
 
 }
 
-void CallsManager::Find(int h, int m, int s, bool &flag, QString &p)
+void CallsManager::Find(int h, int m, int sp, int s, bool &flag, QString &p, int &type)
 {
     Call call;
-    DbManager::Find(h,m,s,flag,call);
+    DbManager::Find(h,m,sp,s,flag,call);
     if (flag) {
         p = call.soundPatch;
+        type = call.type;
     }
 }
 
