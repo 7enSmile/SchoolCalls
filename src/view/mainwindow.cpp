@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <qcheckbox.h>
+#include <QtGui>
 
 
 void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
@@ -434,6 +435,7 @@ void MainWindow::playSound(QString patch)
 
 void MainWindow::updateTime()
 {
+
     QDate dateToday = QDate::currentDate();
     int date = QString::number(dateToday.dayOfWeek()).toInt();
     switch (date) {
@@ -475,6 +477,7 @@ void MainWindow::updateTime()
                                QString::number(QTime::currentTime().minute()));
 
     }
+
     if (QTime::currentTime().minute() != m_minutes && dateToday.dayOfWeek() != 7){
         QSettings settings( "settings.conf", QSettings::IniFormat );
         settings.beginGroup( "WarningCall" );
@@ -483,9 +486,11 @@ void MainWindow::updateTime()
         QString patch;
         int type;
         bool flag;
+
+
+
         switch (ui->comboBoxType->currentIndex()) {
         case 0:
-
             if (m_minutes + 3 < 60){
                 if (dateToday.dayOfWeek() == 6){
 
@@ -505,13 +510,16 @@ void MainWindow::updateTime()
 
             } else {
 
+
+
                 if (dateToday.dayOfWeek() == 6){
 
-                    CallsManager::Find(m_hours,60 - (m_minutes + 3), 0, 1, flag, patch, type);
+                    CallsManager::Find(m_hours + 1,(m_minutes + 3) - 60, 0, 1, flag, patch, type);
 
                 } else {
 
-                    CallsManager::Find(m_hours,60 - (m_minutes + 3), 0, 0, flag, patch, type);
+                    CallsManager::Find(m_hours + 1,(m_minutes + 3) - 60, 0, 0, flag, patch, type);
+
 
                 }
 
@@ -530,11 +538,17 @@ void MainWindow::updateTime()
 
             } else {
 
+
+
                 CallsManager::Find(m_hours,m_minutes, 0, 0, flag, patch, type);
 
             }
 
             if (flag){
+
+
+
+
 
                 playSound(patch);
 

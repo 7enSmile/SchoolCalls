@@ -52,8 +52,8 @@ private:
 
     QTimer *tmr;
 
-    int m_minutes = 0;
-    int m_hours = 0;
+    int m_minutes = -1;
+    int m_hours = -1;
 
     void playSound(QString patch);
 
