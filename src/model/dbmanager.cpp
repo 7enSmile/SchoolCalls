@@ -122,16 +122,17 @@ void DbManager::Find(int h, int m, int sp, int s, bool &flag, Call& call)
 
 }
 
-int DbManager::getId(Call *call)
+int DbManager::getId(int index)
 {
     QSqlDatabase db;
     DbManager::init(db);
-    QString str = QString("SELECT id FROM Calls "
-                          "WHERE hours=%1 and minutes=%2 and type=%3 and soundpatch='%4'and saturday=%5 and special =%6").
-            arg(call->hours).arg(call->minutes).arg(call->type).arg(call->soundPatch).arg(call->saturday).arg(call->special);
+    QString str = QString("SELECT id FROM (SELECT  ROW_NUMBER() OVER (ORDER BY Id DESC)"
+                          "AS ROW, * FROM Calls) "
+                          );
     QSqlQuery query(db);
     query.exec(str);
     query.next();
+    int id = query.value(0).toInt();
     DbManager::close(db);
-    return query.value(0).toInt();
+    return id;
 }

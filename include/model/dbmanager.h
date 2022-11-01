@@ -32,7 +32,7 @@ public:
 
     static void Find(int , int ,int, int, bool&, Call&);
 
-    static int getId(Call* call);
+    static int getId(int index);
 
 };
 

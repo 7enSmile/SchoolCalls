@@ -16,10 +16,11 @@ void CallsManager::insert(int h, int m, QString p, int s, int spt)
 {
     Call* call = new Call(h,m,type,p,s,spt);
     DbManager::insert(call);
-    call->id = DbManager::getId(call);
+    call->id = DbManager::getId(count+1);
 
     m_listOfCalls->push_back(call);
     count++;
+    qDebug() << call->id;
 }
 
 void CallsManager::remove(int index)
@@ -34,7 +35,6 @@ void CallsManager::update(int index, int h, int m, QString p)
     m_listOfCalls->at(index)->hours = h;
     m_listOfCalls->at(index)->minutes = m;
     m_listOfCalls->at(index)->soundPatch = p;
-
     DbManager::update(m_listOfCalls->at(index));
 }
 
