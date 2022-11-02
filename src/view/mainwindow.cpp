@@ -289,7 +289,7 @@ void MainWindow::tableToLessonChanged(QTableWidgetItem *item)
     int index=item->row();
     int h = ui->tableToLesson->item(item->row(),0)->text().toInt();
     int m = ui->tableToLesson->item(item->row(),1)->text().toInt();
-    QString p = ui->tableToLesson->item(item->row(),3)->text();
+    QString p = ui->tableToLesson->item(item->row(),ui->tableToLesson->columnCount()-2)->text();
     updateTable(index,h,m,p,m_toLessonCallsManager);
 }
 
@@ -315,7 +315,7 @@ void MainWindow::tableFromLessonChanged(QTableWidgetItem * item)
     int index=item->row();
     int h = ui->tableFromLesson->item(item->row(),0)->text().toInt();
     int m = ui->tableFromLesson->item(item->row(),1)->text().toInt();
-    QString p = ui->tableFromLesson->item(item->row(),3)->text();
+    QString p = ui->tableFromLesson->item(item->row(),ui->tableFromLesson->columnCount()-2)->text();
     updateTable(index,h,m,p,m_fromLessonCallsManager);
 
 }
@@ -387,7 +387,7 @@ void MainWindow::tablePhysMinChanged(QTableWidgetItem *item)
     int index=item->row();
     int h = ui->tablePhysMin->item(item->row(),0)->text().toInt();
     int m = ui->tablePhysMin->item(item->row(),1)->text().toInt();
-    QString p = ui->tablePhysMin->item(item->row(),3)->text();
+    QString p = ui->tablePhysMin->item(item->row(),ui->tablePhysMin->columnCount()-2)->text();
     updateTable(index,h,m,p,m_phyMinCallsManager);
 
 }
@@ -682,6 +682,7 @@ void MainWindow::clickedChangeWarningCall()
     if (!p.isEmpty()){
 
         QSettings settings( "settings.conf", QSettings::IniFormat );
+
         if (ui->comboBoxType->currentIndex() == 0 ){
 
             settings.beginGroup( "WarningCall" );
