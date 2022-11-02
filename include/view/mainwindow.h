@@ -107,6 +107,8 @@ private slots:
 
     void clickedChangeWarningCall();
 
+    void currentIndexChanged(int);
+
 
 
 };

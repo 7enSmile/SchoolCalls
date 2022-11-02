@@ -20,7 +20,7 @@ void CallsManager::insert(int h, int m, QString p, int s, int spt)
 
     m_listOfCalls->push_back(call);
     count++;
-    qDebug() << call->id;
+
 }
 
 void CallsManager::remove(int index)

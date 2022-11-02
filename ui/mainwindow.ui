@@ -95,17 +95,17 @@
           <widget class="QComboBox" name="comboBoxType">
            <item>
             <property name="text">
-             <string>Включено</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Выключено</string>
+             <string>Обычное</string>
             </property>
            </item>
            <item>
             <property name="text">
              <string>Особенное</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Выключено</string>
             </property>
            </item>
           </widget>
@@ -147,36 +147,11 @@
                  <number>0</number>
                 </property>
                 <property name="columnCount">
-                 <number>5</number>
+                 <number>0</number>
                 </property>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
                 </attribute>
-                <column>
-                 <property name="text">
-                  <string>Часы</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Минуты</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Суббота</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Путь к файлу</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </column>
                </widget>
               </item>
               <item>
@@ -270,36 +245,11 @@
                  <number>0</number>
                 </property>
                 <property name="columnCount">
-                 <number>5</number>
+                 <number>0</number>
                 </property>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
                 </attribute>
-                <column>
-                 <property name="text">
-                  <string>Часы</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Минуты</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Суббота</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Путь к файлу</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </column>
                </widget>
               </item>
               <item>
@@ -379,36 +329,11 @@
                  <number>0</number>
                 </property>
                 <property name="columnCount">
-                 <number>5</number>
+                 <number>0</number>
                 </property>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
                 </attribute>
-                <column>
-                 <property name="text">
-                  <string>Часы</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Минуты</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Суббота</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Путь к файлу</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </column>
                </widget>
               </item>
               <item>
@@ -470,11 +395,6 @@
             </layout>
            </item>
           </layout>
-         </widget>
-         <widget class="QWidget" name="special">
-          <attribute name="title">
-           <string>Особенное</string>
-          </attribute>
          </widget>
         </widget>
        </item>

@@ -11,37 +11,73 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 
 
     table->insertRow(table->rowCount());
-
-    table->setIndexWidget(
-                table->model()->index(table->rowCount()-1 , 2 ),
-                createCheckBoxWidget(0,callManager->type)
-                );
-    table->setIndexWidget(
-                table->model()->index( table->rowCount()-1, 4 ),
-                createPushButton(callManager->type)
-                );
-
-
-
     QString patch;
+    if (ui->comboBoxType->currentIndex()==0){
 
-    if (table->rowCount()!=1){
+        table->setIndexWidget(
+                    table->model()->index(table->rowCount()-1 , 2 ),
+                    createCheckBoxWidget(0,callManager->type)
+                    );
+        table->setIndexWidget(
+                    table->model()->index( table->rowCount()-1, 4 ),
+                    createPushButton(callManager->type)
+                    );
 
-        QString textH = table->item(table->rowCount()-2,0)->text();
-        QString textM = table->item(table->rowCount()-2,1)->text();
-        patch = table->item(table->rowCount()-2,3)->text();
-        table->setItem(table->rowCount()-1,0,new QTableWidgetItem(textH));
-        table->setItem(table->rowCount()-1,1,new QTableWidgetItem(textM));
-        table->setItem(table->rowCount()-1,3,new QTableWidgetItem(patch));
 
 
-    }else{
 
-        table->setItem(table->rowCount()-1,0,new QTableWidgetItem("8"));
-        table->setItem(table->rowCount()-1,1,new QTableWidgetItem("30"));
-        patch = "";
-        table->setItem(table->rowCount()-1,3,new QTableWidgetItem(patch));
+
+        if (table->rowCount()!=1){
+
+            QString textH = table->item(table->rowCount()-2,0)->text();
+            QString textM = table->item(table->rowCount()-2,1)->text();
+            patch = table->item(table->rowCount()-2,3)->text();
+            table->setItem(table->rowCount()-1,0,new QTableWidgetItem(textH));
+            table->setItem(table->rowCount()-1,1,new QTableWidgetItem(textM));
+            table->setItem(table->rowCount()-1,3,new QTableWidgetItem(patch));
+
+
+        }else{
+
+            table->setItem(table->rowCount()-1,0,new QTableWidgetItem("8"));
+            table->setItem(table->rowCount()-1,1,new QTableWidgetItem("30"));
+            patch = "";
+            table->setItem(table->rowCount()-1,3,new QTableWidgetItem(patch));
+        }
+
+    } else {
+
+
+        table->setIndexWidget(
+                    table->model()->index( table->rowCount()-1, 3 ),
+                    createPushButton(callManager->type)
+                    );
+
+
+
+
+
+        if (table->rowCount()!=1){
+
+            QString textH = table->item(table->rowCount()-2,0)->text();
+            QString textM = table->item(table->rowCount()-2,1)->text();
+            patch = table->item(table->rowCount()-2,2)->text();
+            table->setItem(table->rowCount()-1,0,new QTableWidgetItem(textH));
+            table->setItem(table->rowCount()-1,1,new QTableWidgetItem(textM));
+            table->setItem(table->rowCount()-1,2,new QTableWidgetItem(patch));
+
+
+        }else{
+
+            table->setItem(table->rowCount()-1,0,new QTableWidgetItem("8"));
+            table->setItem(table->rowCount()-1,1,new QTableWidgetItem("30"));
+            patch = "";
+            table->setItem(table->rowCount()-1,2,new QTableWidgetItem(patch));
+        }
+
+
     }
+
 
 
 
@@ -57,7 +93,25 @@ void MainWindow::addToTable(QTableWidget *table, CallsManager *callManager)
 void MainWindow::configTable(QTableWidget * table, int type)
 {
 
+
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    if (ui->comboBoxType->currentIndex()==0){
+        table->setColumnCount(5);
+        table->setHorizontalHeaderItem(0,new QTableWidgetItem("Часы"));
+        table->setHorizontalHeaderItem(1,new QTableWidgetItem("Минуты"));
+        table->setHorizontalHeaderItem(2,new QTableWidgetItem("Суббота"));
+        table->setHorizontalHeaderItem(3,new QTableWidgetItem("Путь к файлу"));
+        table->setHorizontalHeaderItem(4,new QTableWidgetItem(""));
+    } else {
+
+        table->setColumnCount(4);
+        table->setHorizontalHeaderItem(0,new QTableWidgetItem("Часы"));
+        table->setHorizontalHeaderItem(1,new QTableWidgetItem("Минуты"));
+        table->setHorizontalHeaderItem(2,new QTableWidgetItem("Путь к файлу"));
+        table->setHorizontalHeaderItem(3,new QTableWidgetItem(""));
+
+
+    }
     table->setItemDelegateForColumn(0,new TableDelegate(24,table));
     table->setItemDelegateForColumn(1,new TableDelegate(59,table));
     //table->setColumnWidth(3,150);
@@ -79,25 +133,44 @@ void MainWindow::configTable(QTableWidget * table, int type)
 
 void MainWindow::fillTable(QTableWidget * table, CallsManager * callManager)
 {
+    table->setRowCount(0);
     int h;
     int m;
     int s;
     QString patch;
     table->setRowCount(callManager->count);
-    for (int i=0;i<callManager->count;i++){
-        callManager->get(i,h,m,patch,s);
+    if (ui->comboBoxType->currentIndex()==0){
+        for (int i=0;i<callManager->count;i++){
+            callManager->get(i,h,m,patch,s);
 
-        table->setIndexWidget(
-                    table->model()->index( i, 2 ),
-                    createCheckBoxWidget(s,callManager->type)
-                    );
-        table->setIndexWidget(
-                    table->model()->index( i, 4 ),
-                    createPushButton(callManager->type)
-                    );
-        table->setItem(i, 0, new QTableWidgetItem(QString::number(h)));
-        table->setItem(i, 1, new QTableWidgetItem(QString::number(m)));
-        table->setItem(i, 3, new QTableWidgetItem(patch));
+            table->setIndexWidget(
+                        table->model()->index( i, 2 ),
+                        createCheckBoxWidget(s,callManager->type)
+                        );
+            table->setIndexWidget(
+                        table->model()->index( i, 4 ),
+                        createPushButton(callManager->type)
+                        );
+            table->setItem(i, 0, new QTableWidgetItem(QString::number(h)));
+            table->setItem(i, 1, new QTableWidgetItem(QString::number(m)));
+            table->setItem(i, 3, new QTableWidgetItem(patch));
+        }
+    } else {
+
+        for (int i=0;i<callManager->count;i++){
+            callManager->get(i,h,m,patch,s);
+
+
+            table->setIndexWidget(
+                        table->model()->index( i, 3 ),
+                        createPushButton(callManager->type)
+                        );
+            table->setItem(i, 0, new QTableWidgetItem(QString::number(h)));
+            table->setItem(i, 1, new QTableWidgetItem(QString::number(m)));
+            table->setItem(i, 2, new QTableWidgetItem(patch));
+        }
+
+
     }
 
 }
@@ -154,10 +227,11 @@ MainWindow::MainWindow(QWidget *parent)
                      this, SLOT(clickedPlaySoundTest()));
     QObject::connect(ui->pushButtonChangeWarningCall, SIGNAL(clicked()),
                      this, SLOT(clickedChangeWarningCall()));
+    QObject::connect(ui->comboBoxType, SIGNAL(currentIndexChanged(int)),
+                     this, SLOT(currentIndexChanged(int)));
     QSettings settings( "settings.conf", QSettings::IniFormat );
     settings.beginGroup( "WarningCall" );
     ui->lineEditWarningCall->setText(settings.value("patch",-1).toString());
-
     tmr = new QTimer();
     tmr->setInterval(30000);
     connect(tmr, SIGNAL(timeout()), this, SLOT(updateTime()));
@@ -266,30 +340,43 @@ void MainWindow::clickedRemovePhysMin()
 
 void MainWindow::clicedPatchToLesson()
 {
+    QObject::disconnect(ui->tableToLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableToLessonChanged);
     QPushButton* pb = qobject_cast< QPushButton* >(sender());
     QModelIndex index = ui->tableToLesson->indexAt( pb->parentWidget()->pos() );
     int h = ui->tableToLesson->item(index.row(),0)->text().toInt();
     int m = ui->tableToLesson->item(index.row(),1)->text().toInt();
     updatePatchToCall(index.row(),h,m,m_toLessonCallsManager,ui->tableToLesson);
+    QObject::connect(ui->tableToLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableToLessonChanged);
 }
 
 void MainWindow::clicedPatchFromLesson()
 {
+    QObject::disconnect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableFromLessonChanged);
     QPushButton* pb = qobject_cast< QPushButton* >(sender());
     QModelIndex index = ui->tableFromLesson->indexAt( pb->parentWidget()->pos() );
     int h = ui->tableFromLesson->item(index.row(),0)->text().toInt();
     int m = ui->tableFromLesson->item(index.row(),1)->text().toInt();
     updatePatchToCall(index.row(),h,m,m_fromLessonCallsManager,ui->tableFromLesson);
+    QObject::connect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableFromLessonChanged);
 
 }
 
 void MainWindow::clicedPatchPhysMin()
 {
+    QObject::disconnect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                        this, &MainWindow::tablePhysMinChanged);
     QPushButton* pb = qobject_cast< QPushButton* >(sender());
     QModelIndex index = ui->tablePhysMin->indexAt( pb->parentWidget()->pos() );
     int h = ui->tablePhysMin->item(index.row(),0)->text().toInt();
     int m = ui->tablePhysMin->item(index.row(),1)->text().toInt();
     updatePatchToCall(index.row(),h,m,m_phyMinCallsManager,ui->tablePhysMin);
+    QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                        this, &MainWindow::tablePhysMinChanged);
+
 
 }
 
@@ -307,20 +394,32 @@ void MainWindow::tablePhysMinChanged(QTableWidgetItem *item)
 
 void MainWindow::clickedPatchToAllToLessonCall()
 {
+    QObject::disconnect(ui->tableToLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableToLessonChanged);
     updatePatchToCallAll(m_toLessonCallsManager,ui->tableToLesson);
+    QObject::connect(ui->tableToLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableToLessonChanged);
 
 
 }
 
 void MainWindow::clickedPatchToAllFromLessonCall()
 {
+    QObject::disconnect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableFromLessonChanged);
     updatePatchToCallAll(m_fromLessonCallsManager,ui->tableFromLesson);
+    QObject::connect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                        this, &MainWindow::tableFromLessonChanged);
 
 }
 
 void MainWindow::clickedPatchToAllPhysMin()
 {
+    QObject::disconnect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                        this, &MainWindow::tablePhysMinChanged);
     updatePatchToCallAll(m_phyMinCallsManager,ui->tablePhysMin);
+    QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                        this, &MainWindow::tablePhysMinChanged);
 
 }
 
@@ -395,7 +494,7 @@ void MainWindow::updatePatchToCall(int index, int h, int m,
                                              "Звуки (*.mp3 *.wav)");
     if (!p.isEmpty()){
         callManager->update(index,h,m,p);
-        table->setItem(index,3,new QTableWidgetItem(p));
+        table->setItem(index,table->columnCount()-2,new QTableWidgetItem(p));
     }
 }
 
@@ -414,7 +513,7 @@ void MainWindow::updatePatchToCallAll(CallsManager *callManager, QTableWidget *t
 
             h = table->item(i,0)->text().toInt();
             m = table->item(i,1)->text().toInt();
-            table->setItem(i,3,new QTableWidgetItem(p));
+            table->setItem(i,table->columnCount()-2,new QTableWidgetItem(p));
             callManager->update(i,h,m,p);
 
         }
@@ -588,6 +687,57 @@ void MainWindow::clickedChangeWarningCall()
         ui->lineEditWarningCall->setText(p);
 
     }
+
+
+}
+
+void MainWindow::currentIndexChanged(int index)
+{
+    if (index == 1 || index == 0){
+
+        ui->tabWidget->setDisabled(false);
+
+        QObject::disconnect(ui->tableToLesson,&QTableWidget::itemChanged,
+                            this, &MainWindow::tableToLessonChanged);
+
+        QObject::disconnect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                            this, &MainWindow::tableFromLessonChanged);
+
+        QObject::disconnect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                            this, &MainWindow::tablePhysMinChanged);
+
+        m_toLessonCallsManager = new CallsManager(0,index);
+
+        m_fromLessonCallsManager = new CallsManager(1,index);
+
+        m_phyMinCallsManager = new CallsManager(2,index);
+
+        configTable(ui->tableToLesson,0);
+
+        configTable(ui->tableFromLesson,1);
+
+        configTable(ui->tablePhysMin,2);
+
+        QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
+                         this, &MainWindow::tablePhysMinChanged);
+
+        QObject::connect(ui->tableFromLesson,&QTableWidget::itemChanged,
+                         this, &MainWindow::tableFromLessonChanged);
+
+
+        QObject::connect(ui->tableToLesson,&QTableWidget::itemChanged,
+                         this, &MainWindow::tableToLessonChanged);
+
+    } else {
+
+        ui->tabWidget->setDisabled(true);
+    }
+
+
+
+
+
+
 
 
 }
