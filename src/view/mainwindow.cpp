@@ -682,7 +682,16 @@ void MainWindow::clickedChangeWarningCall()
     if (!p.isEmpty()){
 
         QSettings settings( "settings.conf", QSettings::IniFormat );
-        settings.beginGroup( "WarningCall" );
+        if (ui->comboBoxType->currentIndex() == 0 ){
+
+            settings.beginGroup( "WarningCall" );
+
+        } else {
+
+
+            settings.beginGroup( "WarningCallSpecial" );
+
+        }
         settings.setValue("patch", p);
         ui->lineEditWarningCall->setText(p);
 
@@ -694,6 +703,22 @@ void MainWindow::clickedChangeWarningCall()
 void MainWindow::currentIndexChanged(int index)
 {
     if (index == 1 || index == 0){
+
+        QSettings settings( "settings.conf", QSettings::IniFormat );
+
+        if (index == 0 ){
+
+            settings.beginGroup( "WarningCall" );
+
+
+        } else {
+
+
+            settings.beginGroup( "WarningCallSpecial" );
+
+        }
+
+        ui->lineEditWarningCall->setText(settings.value("patch",-1).toString());
 
         ui->tabWidget->setDisabled(false);
 
