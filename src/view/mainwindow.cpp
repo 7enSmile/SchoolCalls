@@ -112,7 +112,7 @@ void MainWindow::configTable(QTableWidget * table, int type)
 
 
     }
-    table->setItemDelegateForColumn(0,new TableDelegate(24,table));
+    table->setItemDelegateForColumn(0,new TableDelegate(23,table));
     table->setItemDelegateForColumn(1,new TableDelegate(59,table));
     //table->setColumnWidth(3,150);
 
@@ -348,7 +348,7 @@ void MainWindow::clicedPatchToLesson()
     int m = ui->tableToLesson->item(index.row(),1)->text().toInt();
     updatePatchToCall(index.row(),h,m,m_toLessonCallsManager,ui->tableToLesson);
     QObject::connect(ui->tableToLesson,&QTableWidget::itemChanged,
-                        this, &MainWindow::tableToLessonChanged);
+                     this, &MainWindow::tableToLessonChanged);
 }
 
 void MainWindow::clicedPatchFromLesson()
@@ -361,7 +361,7 @@ void MainWindow::clicedPatchFromLesson()
     int m = ui->tableFromLesson->item(index.row(),1)->text().toInt();
     updatePatchToCall(index.row(),h,m,m_fromLessonCallsManager,ui->tableFromLesson);
     QObject::connect(ui->tableFromLesson,&QTableWidget::itemChanged,
-                        this, &MainWindow::tableFromLessonChanged);
+                     this, &MainWindow::tableFromLessonChanged);
 
 }
 
@@ -375,7 +375,7 @@ void MainWindow::clicedPatchPhysMin()
     int m = ui->tablePhysMin->item(index.row(),1)->text().toInt();
     updatePatchToCall(index.row(),h,m,m_phyMinCallsManager,ui->tablePhysMin);
     QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
-                        this, &MainWindow::tablePhysMinChanged);
+                     this, &MainWindow::tablePhysMinChanged);
 
 
 }
@@ -398,7 +398,7 @@ void MainWindow::clickedPatchToAllToLessonCall()
                         this, &MainWindow::tableToLessonChanged);
     updatePatchToCallAll(m_toLessonCallsManager,ui->tableToLesson);
     QObject::connect(ui->tableToLesson,&QTableWidget::itemChanged,
-                        this, &MainWindow::tableToLessonChanged);
+                     this, &MainWindow::tableToLessonChanged);
 
 
 }
@@ -409,7 +409,7 @@ void MainWindow::clickedPatchToAllFromLessonCall()
                         this, &MainWindow::tableFromLessonChanged);
     updatePatchToCallAll(m_fromLessonCallsManager,ui->tableFromLesson);
     QObject::connect(ui->tableFromLesson,&QTableWidget::itemChanged,
-                        this, &MainWindow::tableFromLessonChanged);
+                     this, &MainWindow::tableFromLessonChanged);
 
 }
 
@@ -419,7 +419,7 @@ void MainWindow::clickedPatchToAllPhysMin()
                         this, &MainWindow::tablePhysMinChanged);
     updatePatchToCallAll(m_phyMinCallsManager,ui->tablePhysMin);
     QObject::connect(ui->tablePhysMin,&QTableWidget::itemChanged,
-                        this, &MainWindow::tablePhysMinChanged);
+                     this, &MainWindow::tablePhysMinChanged);
 
 }
 
@@ -578,18 +578,17 @@ void MainWindow::updateTime()
     }
 
     if (QTime::currentTime().minute() != m_minutes && dateToday.dayOfWeek() != 7){
-        QSettings settings( "settings.conf", QSettings::IniFormat );
-        settings.beginGroup( "WarningCall" );
+
+
         m_minutes = QTime::currentTime().minute();
         m_hours = QTime::currentTime().hour();
         QString patch;
         int type;
         bool flag;
-
-
-
         switch (ui->comboBoxType->currentIndex()) {
         case 0:
+
+
             if (m_minutes + 3 < 60){
                 if (dateToday.dayOfWeek() == 6){
 
@@ -603,7 +602,7 @@ void MainWindow::updateTime()
 
                 if (flag && type == 0){
 
-                    playSound(settings.value("patch",-1).toString());
+                    playSound(ui->lineEditWarningCall->text());
 
                 }
 
@@ -625,7 +624,7 @@ void MainWindow::updateTime()
 
                 if (flag && type == 0){
 
-                    playSound(settings.value("patch",-1).toString());
+                    playSound(ui->lineEditWarningCall->text());
 
                 }
 
@@ -637,17 +636,48 @@ void MainWindow::updateTime()
 
             } else {
 
-
-
                 CallsManager::Find(m_hours,m_minutes, 0, 0, flag, patch, type);
 
             }
 
             if (flag){
 
+                playSound(patch);
+
+            }
+
+            break;
+
+
+        case 1:
 
 
 
+            if (m_minutes + 3 < 60){
+
+                CallsManager::Find(m_hours,m_minutes + 3, 1, 0, flag, patch, type);
+
+                if (flag && type == 0){
+
+                    playSound(ui->lineEditWarningCall->text());
+
+                }
+
+            } else {
+
+
+                CallsManager::Find(m_hours + 1,(m_minutes + 3) - 60, 1, 0, flag, patch, type);
+
+                if (flag && type == 0){
+
+                    playSound(ui->lineEditWarningCall->text());
+
+                }
+            }
+
+            CallsManager::Find(m_hours,m_minutes, 1, 0, flag, patch, type);
+
+            if (flag){
 
                 playSound(patch);
 
@@ -656,7 +686,6 @@ void MainWindow::updateTime()
             break;
 
         default:
-
             break;
 
         }
